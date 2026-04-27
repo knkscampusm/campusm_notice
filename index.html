@@ -135,11 +135,25 @@ body{display:flex;flex-direction:column}
 
 /* ── Notice paper ── */
 .paper{
-  background:var(--white);width:100%;max-width:680px;min-height:860px;
+  background:var(--white);width:100%;
   padding:52px 56px;border-radius:4px;
   box-shadow:0 2px 24px rgba(0,0,0,0.07);
   font-family:var(--font);color:var(--ink);font-size:15px;
+  transition:max-width .25s, min-height .25s;
 }
+/* 가로 (landscape) - 기본 */
+.paper.landscape{max-width:960px;min-height:560px;}
+/* 세로 (portrait) */
+.paper.portrait{max-width:680px;min-height:860px;}
+
+/* orientation toggle buttons */
+.orient-btn{
+  background:none;border:1.5px solid var(--line);border-radius:6px;
+  padding:4px 10px;font-family:var(--font);font-size:11px;color:var(--muted);
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;
+}
+.orient-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700;}
+.orient-btn:hover:not(.active){border-color:var(--ink2);color:var(--ink2)}
 .n-title{font-size:24px;font-weight:900;text-align:center;letter-spacing:-.3px;margin-bottom:24px;line-height:1.35}
 .n-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:14px}
 .n-table th{background:var(--teal);color:#fff;padding:10px 12px;text-align:center;font-weight:700;font-size:13px}
@@ -186,7 +200,7 @@ body{display:flex;flex-direction:column}
   .topbar,.editor,.preview-bar{display:none!important}
   body,.workspace,.preview{display:block;overflow:visible;background:white}
   .preview-scroll{padding:0;overflow:visible;display:block}
-  .paper{box-shadow:none;max-width:100%;padding:15mm 18mm;border-radius:0;min-height:unset}
+  .paper{box-shadow:none;max-width:100%!important;padding:12mm 16mm;border-radius:0;min-height:unset!important}
 }
 </style>
 </head>
@@ -222,6 +236,9 @@ body{display:flex;flex-direction:column}
     <div class="preview-bar">
       <span class="preview-bar-label">미리보기</span>
       <div style="display:flex;gap:8px;align-items:center">
+        <button class="orient-btn active" id="btnLandscape">↔ 가로</button>
+        <button class="orient-btn" id="btnPortrait">↕ 세로</button>
+        <div style="width:1px;height:16px;background:var(--line);margin:0 2px"></div>
         <label style="font-size:11px;color:var(--muted)">글자 크기</label>
         <select id="fontSz" style="border:1.5px solid var(--line);border-radius:6px;padding:4px 8px;font-family:var(--font);font-size:11px;outline:none">
           <option value="13">소</option>
@@ -232,7 +249,7 @@ body{display:flex;flex-direction:column}
       </div>
     </div>
     <div class="preview-scroll">
-      <div class="paper" id="paper"></div>
+      <div class="paper landscape" id="paper"></div>
     </div>
   </div>
 </div>
@@ -581,7 +598,28 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// ── Font size ──────────────────────────────────────────────────────
+// ── Orientation ────────────────────────────────────────────────────
+let orientation = 'landscape'; // default
+
+function applyOrientation() {
+  const paper = document.getElementById('paper');
+  paper.classList.toggle('landscape', orientation === 'landscape');
+  paper.classList.toggle('portrait', orientation === 'portrait');
+  document.getElementById('btnLandscape').classList.toggle('active', orientation === 'landscape');
+  document.getElementById('btnPortrait').classList.toggle('active', orientation === 'portrait');
+
+  // @page size for print
+  let styleTag = document.getElementById('orientStyle');
+  if (!styleTag) { styleTag = document.createElement('style'); styleTag.id = 'orientStyle'; document.head.appendChild(styleTag); }
+  styleTag.textContent = orientation === 'landscape'
+    ? '@page { size: A4 landscape; margin: 10mm 14mm; }'
+    : '@page { size: A4 portrait; margin: 10mm 14mm; }';
+}
+
+document.getElementById('btnLandscape').addEventListener('click', () => { orientation = 'landscape'; applyOrientation(); });
+document.getElementById('btnPortrait').addEventListener('click', () => { orientation = 'portrait'; applyOrientation(); });
+
+applyOrientation();
 document.getElementById('fontSz').addEventListener('change', e => {
   document.getElementById('paper').style.fontSize = e.target.value + 'px';
 });
