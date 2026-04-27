@@ -155,9 +155,9 @@ body{display:flex;flex-direction:column}
 .orient-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700;}
 .orient-btn:hover:not(.active){border-color:var(--ink2);color:var(--ink2)}
 .n-title{font-size:24px;font-weight:900;text-align:center;letter-spacing:-.3px;margin-bottom:24px;line-height:1.35}
-.n-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:14px}
-.n-table th{background:var(--teal);color:#fff;padding:10px 12px;text-align:center;font-weight:700;font-size:13px}
-.n-table td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--line)}
+.n-table{width:100%;table-layout:fixed;border-collapse:collapse;margin-bottom:14px;font-size:14px}
+.n-table th{background:var(--teal);color:#fff;padding:10px 12px;text-align:center;font-weight:700;font-size:13px;word-break:keep-all}
+.n-table td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--line);word-break:keep-all}
 .n-table tr:last-child td{border-bottom:none}
 .n-table th:not(:last-child),.n-table td:not(:last-child){border-right:1px solid var(--line)}
 .n-table tbody tr{border:1px solid var(--line);border-top:none}
