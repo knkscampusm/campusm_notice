@@ -78,66 +78,70 @@ body{display:flex;flex-direction:column}
 .orient-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700}
 .orient-btn:hover:not(.active){border-color:var(--ink2);color:var(--ink2)}
 
-.fill-btn{background:none;border:1.5px solid var(--line);border-radius:6px;padding:4px 10px;font-family:var(--font);font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s}
-.fill-btn.on{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700}
-.fill-btn:hover:not(.on){border-color:var(--ink2);color:var(--ink2)}
-
 /* ── PAPER ── */
+/* paper는 항상 페이지 고정 높이 (flex column) */
 .paper{
   background:var(--white);
-  padding:48px 52px;
   border-radius:4px;
   box-shadow:0 2px 24px rgba(0,0,0,0.07);
-  font-family:var(--font);color:var(--ink);font-size:15px;
+  font-family:var(--font);color:var(--ink);
   width:100%;
+  display:flex;
+  flex-direction:column;
+  /* padding은 JS에서 orientation에 따라 설정 */
 }
-.paper.landscape{max-width:960px}
-.paper.portrait{max-width:680px}
+.paper.landscape{max-width:960px;height:560px;padding:44px 52px;}
+.paper.portrait {max-width:680px;height:840px;padding:52px 56px;}
 
-/* fill-on: paper가 고정 높이, flex column */
-.paper.fill-on{display:flex;flex-direction:column;}
-.paper.fill-on.landscape{height:590px;}
-.paper.fill-on.portrait{height:890px;}
+/* 표 wrapper → flex:1 로 남은 공간 차지 */
+.n-table-wrap{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.n-table-wrap table{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+  flex:1;         /* tbody가 늘어남 */
+  min-height:0;
+}
+/* tbody 행들이 균등하게 높이 배분 */
+.n-table-wrap table tbody{
+  display:table-row-group;
+}
 
-/* fill-on: 표 wrapper가 남은 공간 차지 */
-.paper.fill-on .n-table-wrap{flex:1;min-height:0;display:flex;flex-direction:column;}
-.paper.fill-on .n-table-wrap table{flex:1;min-height:0;}
-
-/* fill-on: 나머지 요소들은 크기 고정 */
-.paper.fill-on .n-title,
-.paper.fill-on .n-cautions,
-.paper.fill-on .n-body,
-.paper.fill-on .n-notes,
-.paper.fill-on .n-footer{flex-shrink:0;}
-
-/* ── NOTICE STYLES ── */
-.n-title{font-size:26px;font-weight:900;text-align:center;letter-spacing:-.3px;margin-bottom:20px;line-height:1.35}
-.n-table-wrap{margin-bottom:12px}
-.n-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}
-.n-table th{background:var(--teal);color:#fff;padding:10px 12px;text-align:center;font-weight:700;font-size:13px;word-break:keep-all}
-.n-table td{padding:9px 12px;text-align:center;border-bottom:1px solid var(--line);word-break:keep-all;vertical-align:middle}
-.n-table tr:last-child td{border-bottom:none}
-.n-table th:not(:last-child),.n-table td:not(:last-child){border-right:1px solid var(--line)}
-.n-table tbody{border:1px solid var(--line);border-top:none}
-.n-cautions{background:#fafafa;border-radius:6px;padding:10px 12px;margin-bottom:14px}
-.n-caution{font-size:12px;color:var(--ink2);line-height:1.65}
-.n-body{margin-top:14px}
-.n-item{display:flex;gap:8px;margin-bottom:9px;font-size:14px;line-height:1.75}
-.n-label{color:var(--teal);font-weight:700;white-space:nowrap;flex-shrink:0;min-width:60px}
+/* ── NOTICE CONTENT ── */
+.n-title{font-weight:900;text-align:center;letter-spacing:-.3px;margin-bottom:0.6em;line-height:1.3;flex-shrink:0}
+.n-table-hdr th{background:var(--teal);color:#fff;text-align:center;font-weight:700;word-break:keep-all}
+.n-table-body td{text-align:center;border-bottom:1px solid var(--line);word-break:keep-all;vertical-align:middle}
+.n-table-body tr:last-child td{border-bottom:none}
+.n-table-hdr th:not(:last-child),
+.n-table-body td:not(:last-child){border-right:1px solid var(--line)}
+.n-table-wrap table tbody{border:1px solid var(--line);border-top:none}
+.n-cautions{background:#fafafa;border-radius:6px;flex-shrink:0}
+.n-caution{color:var(--ink2);line-height:1.7}
+.n-body{flex-shrink:0}
+.n-item{display:flex;gap:0.6em;line-height:1.8}
+.n-label{color:var(--teal);font-weight:700;white-space:nowrap;flex-shrink:0;min-width:4em}
 .n-content{flex:1}
-.n-note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:4px}
+.n-note{color:var(--muted);line-height:1.6;margin-top:0.2em}
 .n-note::before{content:'※ '}
-.n-notes{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
-.n-greeting{font-size:14px;line-height:1.85;margin-bottom:16px}
-.n-sec{margin-bottom:14px}
-.n-sec-title{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px}
-.n-sec-title::before{content:'■';color:var(--teal);font-size:9px}
-.n-bullet{display:flex;gap:6px;padding-left:10px;font-size:13px;margin-bottom:4px;line-height:1.65}
+.n-notes{border-top:1px solid var(--line);flex-shrink:0}
+.n-greeting{line-height:1.9;flex-shrink:0}
+.n-secs{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-evenly}
+.n-sec{flex-shrink:0}
+.n-sec-title{font-weight:700;display:flex;align-items:center;gap:5px;margin-bottom:0.3em}
+.n-sec-title::before{content:'■';color:var(--teal);font-size:0.6em}
+.n-bullet{display:flex;gap:6px;padding-left:1em;line-height:1.7}
 .n-bullet::before{content:'•';color:var(--teal);flex-shrink:0}
-.n-big-bullet{display:flex;gap:10px;margin-bottom:14px;font-size:14px;line-height:1.75}
+.n-bullets{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-evenly}
+.n-big-bullet{display:flex;gap:0.6em;line-height:1.8}
 .n-big-bullet::before{content:'▶';color:var(--teal);font-weight:700;flex-shrink:0}
-.n-footer{margin-top:28px;border-top:1px solid var(--line);padding-top:10px;text-align:right;font-size:11px;font-weight:700;color:var(--teal-d)}
+.n-footer{border-top:1px solid var(--line);text-align:right;font-weight:700;color:var(--teal-d);flex-shrink:0}
 
+/* SAVED SIDEBAR */
 .saved-sidebar{width:0;flex-shrink:0;background:var(--white);border-left:0px solid var(--line);display:flex;flex-direction:column;overflow:hidden;transition:width .25s ease,border-left-width .25s ease}
 .saved-sidebar.open{width:240px;border-left-width:1px}
 .saved-sidebar-hd{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--line);flex-shrink:0}
@@ -160,10 +164,13 @@ body{display:flex;flex-direction:column}
   .topbar,.editor,.preview-bar,.saved-sidebar{display:none!important}
   body,.workspace,.preview{display:block;overflow:visible;background:white}
   .preview-scroll{padding:0;overflow:visible;display:block}
-  .paper{box-shadow:none;max-width:100%!important;padding:12mm 16mm;border-radius:0;height:auto!important;display:block!important}
-  .paper.fill-on .n-table-wrap{flex:none;display:block;}
-  .paper.fill-on .n-table-wrap table{flex:none;}
-  .n-table th{background:#3DBDB5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important}
+  .paper{box-shadow:none;max-width:100%!important;border-radius:0;height:auto!important}
+  .paper.landscape{padding:12mm 16mm}
+  .paper.portrait{padding:14mm 18mm}
+  .n-table-wrap{flex:none;display:block}
+  .n-table-wrap table{flex:none}
+  .n-secs,.n-bullets{display:block}
+  .n-table-hdr th{background:#3DBDB5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important}
   .n-label{color:#3DBDB5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .n-footer{color:#2a9e96!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -195,18 +202,9 @@ body{display:flex;flex-direction:column}
   <div class="preview">
     <div class="preview-bar">
       <span class="preview-bar-label">미리보기</span>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;align-items:center">
         <button class="orient-btn active" id="btnLandscape">↔ 가로</button>
         <button class="orient-btn" id="btnPortrait">↕ 세로</button>
-        <div style="width:1px;height:16px;background:var(--line)"></div>
-        <label style="font-size:11px;color:var(--muted)">글자 크기</label>
-        <select id="fontSz" style="border:1.5px solid var(--line);border-radius:6px;padding:4px 8px;font-family:var(--font);font-size:11px;outline:none">
-          <option value="13">소</option>
-          <option value="15" selected>중</option>
-          <option value="17">대</option>
-        </select>
-        <div style="width:1px;height:16px;background:var(--line)"></div>
-        <button class="fill-btn" id="btnFill">⬛ 페이지 채우기</button>
         <button class="btn-ghost" id="btnReset">초기화</button>
       </div>
     </div>
@@ -244,7 +242,6 @@ const db = getFirestore(app);
 
 let tpl = 'exam';
 let data = {};
-let fillMode = false;
 let orientation = 'landscape';
 
 const DEFAULTS = {
@@ -255,101 +252,90 @@ const DEFAULTS = {
     items:[{l:'배부',c:''},{l:'준비',c:'시험 시작 10분 전 학생들은 본인이 신청한 시험장소에 착석 후 대기'},{l:'시행',c:'시험 시간에 맞춰 시험지와 OMR을 꺼내어 응시'},{l:'제출',c:'생활담임 선생님 안내에 따라 OMR 제출'},{l:'성적처리',c:''}],
     notes:['성적표는 배부일 다음주 수요일, 문항정답률은 월요일에 디멤버에서 확인 가능'],
   },
-  absent:{subject:'',teacher:'',headers:['선생님','과목','일시'],rows:[['김범준 선생님','미적분 A1','4/23(목) 1~2교시'],['김범준 선생님','미적분 B2','4/23(목) 3~4교시']],notes:['해당 학생들은 퀀텀점프에서 자습 부탁드립니다.','보강일정은 추후 안내드리도록 하겠습니다.']},
-  event:{title:'2027학년도 입시 설명회 관련 안내',greeting:'안녕하세요, 강남대성기숙 의대관입니다.\n보다 체계적인 입시 준비를 위해 아래와 같이 설명회를 마련하였습니다.',sections:[{title:'설명회 개요',items:['대상: 의대관 재원생(현장/영상) 및 학부모(영상)','일정: 5월 17일 (일요일) 10시 예정','장소: 의대관 강의동 S02호 강의실','연사: 대성학원 입시전략실 김원중 실장']},{title:'진행 방식 안내',items:['재원생: 학원에서 직접 설명회 참여 / 디멤버에 영상 제공','재원생 학부모: 설명회 내용을 촬영한 영상을 별도 제공(유튜브 예정)']}],notes:['설명회 종료 후 2~3일 이내 문자 링크 발송']},
+  absent:{subject:'',teacher:'',headers:['선생님','과목','일시'],
+    rows:[['김범준 선생님','미적분 A1','4/23(목) 1~2교시'],['김범준 선생님','미적분 B2','4/23(목) 3~4교시']],
+    notes:['해당 학생들은 퀀텀점프에서 자습 부탁드립니다.','보강일정은 추후 안내드리도록 하겠습니다.']},
+  event:{title:'2027학년도 입시 설명회 관련 안내',
+    greeting:'안녕하세요, 강남대성기숙 의대관입니다.\n보다 체계적인 입시 준비를 위해 아래와 같이 설명회를 마련하였습니다.',
+    sections:[
+      {title:'설명회 개요',items:['대상: 의대관 재원생(현장/영상) 및 학부모(영상)','일정: 5월 17일 (일요일) 10시 예정','장소: 의대관 강의동 S02호 강의실','연사: 대성학원 입시전략실 김원중 실장']},
+      {title:'진행 방식 안내',items:['재원생: 학원에서 직접 설명회 참여 / 디멤버에 영상 제공','재원생 학부모: 설명회 내용을 촬영한 영상을 별도 제공(유튜브 예정)']},
+    ],notes:['설명회 종료 후 2~3일 이내 문자 링크 발송']},
   notice:{title:'',greeting:'안녕하세요, 강남대성기숙 의대관입니다.',bullets:[{c:''},{c:''}],notes:[]},
   free:{title:'',body:''},
 };
 
 function cloneDefault(t){ return JSON.parse(JSON.stringify(DEFAULTS[t])); }
 
-// ══════════════════════════════════════════
-// 페이지 채우기: 표 행의 실제 높이를 JS로 계산해서 직접 지정
-// ══════════════════════════════════════════
-function applyFill() {
-  if (!fillMode) return;
+// ══════════════════════════════════════════════════════
+// 자동 채우기 + 자동 글씨 크기
+// 로직:
+//   1. 행 수에 따라 기본 fontSize 결정 (행 적을수록 큰 글씨)
+//   2. paper를 flex column으로 고정, 표 wrapper가 flex:1
+//   3. tbody 행들 높이를 JS로 균등 분배
+// ══════════════════════════════════════════════════════
+function autoFill() {
   const paper = document.getElementById('paper');
-  const tbody = paper.querySelector('.n-table tbody');
 
-  if (!tbody) {
-    // 표 없는 템플릿: 항목 간 gap을 키워서 채우기
-    requestAnimationFrame(() => {
-      const paperH = paper.clientHeight;
-      const blocks = paper.querySelectorAll('.n-big-bullet, .n-bullet, .n-item, .n-sec, .n-greeting');
-      if (!blocks.length) return;
-      const footer = paper.querySelector('.n-footer');
-      const footerH = footer ? footer.offsetHeight + 28 : 50;
-      const usedH = paper.scrollHeight;
-      const spare = paperH - usedH;
-      if (spare <= 0) return;
-      const addPer = spare / blocks.length;
-      blocks.forEach(b => {
-        b.style.marginBottom = (parseFloat(getComputedStyle(b).marginBottom) + addPer * 0.85) + 'px';
-      });
-    });
-    return;
-  }
+  // ── 1. 글씨 크기 자동 결정 ──
+  // 콘텐츠 "밀도"를 행/항목 수로 추정
+  const rowCount  = (data.rows  || []).length;
+  const itemCount = (data.items || data.bullets || data.sections || []).length;
+  const noteCount = (data.notes || []).length;
+  const total = rowCount + itemCount + noteCount;
 
-  // 표 있는 템플릿
+  // 글씨 크기: 내용 적을수록 크게 (최소 13, 최대 22)
+  let fs;
+  if      (total <= 3)  fs = 20;
+  else if (total <= 5)  fs = 17;
+  else if (total <= 8)  fs = 15;
+  else if (total <= 12) fs = 13;
+  else                  fs = 12;
+
+  paper.style.fontSize = fs + 'px';
+
+  // ── 2. 표 행 높이 균등 분배 ──
   requestAnimationFrame(() => {
-    const paper = document.getElementById('paper');
-    const paperH = paper.clientHeight;      // fill-on 으로 고정된 높이
-    const padTop = parseInt(getComputedStyle(paper).paddingTop);
-    const padBot = parseInt(getComputedStyle(paper).paddingBottom);
+    const tbody = paper.querySelector('tbody');
+    if (!tbody) return;
 
-    // 표 제외한 나머지 높이 측정
+    const paperH  = paper.clientHeight;
+    const padTop  = parseInt(getComputedStyle(paper).paddingTop);
+    const padBot  = parseInt(getComputedStyle(paper).paddingBottom);
+
+    // 표 외 요소들 높이 합산
     let otherH = 0;
     Array.from(paper.children).forEach(child => {
       if (child.classList.contains('n-table-wrap')) return;
-      const style = getComputedStyle(child);
-      otherH += child.offsetHeight
-        + parseFloat(style.marginTop)
-        + parseFloat(style.marginBottom);
+      const s = getComputedStyle(child);
+      otherH += child.offsetHeight + parseFloat(s.marginTop||0) + parseFloat(s.marginBottom||0);
     });
 
-    const thead = paper.querySelector('.n-table thead');
+    const thead  = paper.querySelector('thead');
     const theadH = thead ? thead.offsetHeight : 0;
-    const wrapStyle = getComputedStyle(paper.querySelector('.n-table-wrap'));
-    const wrapMarginB = parseFloat(wrapStyle.marginBottom) || 0;
 
-    // tbody가 쓸 수 있는 높이
-    const available = paperH - padTop - padBot - otherH - theadH - wrapMarginB - 4;
+    const available = paperH - padTop - padBot - otherH - theadH - 4;
     const rows = tbody.querySelectorAll('tr');
     if (!rows.length || available <= 0) return;
 
-    const rowH = Math.max(available / rows.length, 36);
-
+    const rowH = Math.max(available / rows.length, 32);
     rows.forEach(tr => {
       tr.style.height = rowH + 'px';
       tr.querySelectorAll('td').forEach(td => {
         td.style.height = rowH + 'px';
-        td.style.padding = '0 12px';
+        td.style.padding = '0 14px';
         td.style.verticalAlign = 'middle';
       });
     });
   });
 }
 
-function clearFill() {
-  const paper = document.getElementById('paper');
-  paper.querySelectorAll('tr').forEach(tr => {
-    tr.style.height = '';
-    tr.querySelectorAll('td').forEach(td => {
-      td.style.height = '';
-      td.style.padding = '';
-      td.style.verticalAlign = '';
-    });
-  });
-  paper.querySelectorAll('.n-big-bullet,.n-bullet,.n-item,.n-sec,.n-greeting').forEach(b => {
-    b.style.marginBottom = '';
-  });
-}
-
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // EDITOR
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function renderEditor(){
-  document.getElementById('editorBody').innerHTML = {exam:edExam,absent:edAbsent,event:edEvent,notice:edNotice,free:edFree}[tpl]();
+  document.getElementById('editorBody').innerHTML =
+    {exam:edExam,absent:edAbsent,event:edEvent,notice:edNotice,free:edFree}[tpl]();
   bindEditor();
 }
 
@@ -380,7 +366,10 @@ function edEvent(){const d=data;return `
   <div class="sec-title">섹션 구성</div>
   <div id="secList">${d.sections.map((s,si)=>`
     <div style="border:1.5px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px">
-      <div style="display:flex;gap:6px;margin-bottom:8px"><input class="inp" data-st="${si}" value="${s.title}" placeholder="섹션 제목" style="font-weight:700" /><button class="del-btn" data-del-sec="${si}" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.4;font-size:14px">✕</button></div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <input class="inp" data-st="${si}" value="${s.title}" placeholder="섹션 제목" style="font-weight:700" />
+        <button class="del-btn" data-del-sec="${si}" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.4;font-size:14px">✕</button>
+      </div>
       <div class="item-rows">${s.items.map((it,ii)=>`<div class="item-row"><textarea class="ta" data-si="${si}-${ii}" style="min-height:40px">${it}</textarea><button class="del-btn" data-del-si="${si}-${ii}" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.4;font-size:14px;padding:8px 2px">✕</button></div>`).join('')}</div>
       <button class="add-btn" data-add-si="${si}">+ 항목 추가</button>
     </div>`).join('')}</div>
@@ -445,78 +434,80 @@ function bindEditor(){
 }
 function re(){renderEditor();renderPreview();}
 
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // PREVIEW
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 function renderPreview(){
   const paper=document.getElementById('paper');
   paper.innerHTML={exam:pvExam,absent:pvAbsent,event:pvEvent,notice:pvNotice,free:pvFree}[tpl]();
-  if(fillMode) applyFill();
+  autoFill();
 }
 
 function pvExam(){const d=data;
-  const rows=d.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+  const rows=d.rows.map(r=>`<tr class="n-table-body">${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
   const cautions=d.cautions.filter(Boolean).map((c,i)=>`<div class="n-caution">${i+1}. ${c}</div>`).join('');
-  const items=d.items.filter(it=>it.l||it.c).map(it=>`<div class="n-item"><span class="n-label">${it.l}</span><span class="n-content">${it.c.replace(/\n/g,'<br>')}</span></div>`).join('');
+  const items=d.items.filter(it=>it.l||it.c).map(it=>`<div class="n-item" style="margin-bottom:0.45em"><span class="n-label">${it.l}</span><span class="n-content">${it.c.replace(/\n/g,'<br>')}</span></div>`).join('');
   const notes=d.notes.filter(Boolean).map(n=>`<div class="n-note">${n}</div>`).join('');
-  return `<div class="n-title">${d.date?d.date+' ':''}콘텐츠 시행 안내</div>
-    <div class="n-table-wrap"><table class="n-table"><thead><tr>${d.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
-    ${cautions?`<div class="n-cautions">${cautions}</div>`:''}
-    <div class="n-body">${items}</div>
-    ${notes?`<div class="n-notes">${notes}</div>`:''}
-    <div class="n-footer">강남대성기숙 의대관</div>`;}
+  return `
+    <div class="n-title" style="font-size:1.75em">${d.date?d.date+' ':''}콘텐츠 시행 안내</div>
+    <div class="n-table-wrap">
+      <table>
+        <thead class="n-table-hdr"><tr>${d.headers.map(h=>`<th style="padding:0.6em 0.8em">${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${cautions?`<div class="n-cautions" style="margin-top:0.8em;padding:0.6em 0.9em">${cautions}</div>`:''}
+    <div class="n-body" style="margin-top:0.8em">${items}</div>
+    ${notes?`<div class="n-notes" style="margin-top:0.8em;padding-top:0.6em">${notes}</div>`:''}
+    <div class="n-footer" style="margin-top:0.8em;padding-top:0.6em;font-size:0.75em">강남대성기숙 의대관</div>`;}
 
 function pvAbsent(){const d=data;
   const title=`${d.subject||''} ${d.teacher||''}`.trim()+(d.subject||d.teacher?' 휴강 안내':'휴강 안내');
-  const rows=d.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+  const rows=d.rows.map(r=>`<tr class="n-table-body">${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
   const notes=d.notes.filter(Boolean).map(n=>`<div class="n-note">${n}</div>`).join('');
-  return `<div class="n-title">${title}</div>
-    <div class="n-table-wrap"><table class="n-table"><thead><tr>${d.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
-    ${notes?`<div class="n-notes" style="margin-top:20px">${notes}</div>`:''}
-    <div class="n-footer">강남대성기숙 의대관</div>`;}
+  return `
+    <div class="n-title" style="font-size:1.75em">${title}</div>
+    <div class="n-table-wrap">
+      <table>
+        <thead class="n-table-hdr"><tr>${d.headers.map(h=>`<th style="padding:0.6em 0.8em">${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${notes?`<div class="n-notes" style="margin-top:0.8em;padding-top:0.6em">${notes}</div>`:''}
+    <div class="n-footer" style="margin-top:0.8em;padding-top:0.6em;font-size:0.75em">강남대성기숙 의대관</div>`;}
 
 function pvEvent(){const d=data;
-  const secs=d.sections.map(s=>`<div class="n-sec"><div class="n-sec-title">${s.title}</div>${s.items.filter(Boolean).map(it=>`<div class="n-bullet">${it}</div>`).join('')}</div>`).join('');
+  const secs=d.sections.map(s=>`
+    <div class="n-sec">
+      <div class="n-sec-title">${s.title}</div>
+      ${s.items.filter(Boolean).map(it=>`<div class="n-bullet">${it}</div>`).join('')}
+    </div>`).join('');
   const notes=d.notes.filter(Boolean).map(n=>`<div class="n-note">${n}</div>`).join('');
-  return `<div class="n-title">${d.title}</div>
-    <div class="n-greeting">${(d.greeting||'').replace(/\n/g,'<br>')}</div>
-    ${secs}${notes?`<div class="n-notes">${notes}</div>`:''}
-    <div class="n-footer">강남대성기숙 의대관</div>`;}
+  return `
+    <div class="n-title" style="font-size:1.75em">${d.title}</div>
+    <div class="n-greeting" style="margin-bottom:0.8em;font-size:0.95em">${(d.greeting||'').replace(/\n/g,'<br>')}</div>
+    <div class="n-secs">${secs}</div>
+    ${notes?`<div class="n-notes" style="margin-top:0.8em;padding-top:0.6em">${notes}</div>`:''}
+    <div class="n-footer" style="margin-top:0.8em;padding-top:0.6em;font-size:0.75em">강남대성기숙 의대관</div>`;}
 
 function pvNotice(){const d=data;
   const bullets=d.bullets.filter(b=>b.c).map(b=>`<div class="n-big-bullet">${b.c.replace(/\n/g,'<br>')}</div>`).join('');
   const notes=d.notes.filter(Boolean).map(n=>`<div class="n-note">${n}</div>`).join('');
-  return `${d.title?`<div class="n-title">${d.title}</div>`:''}
-    ${d.greeting?`<div class="n-greeting">${d.greeting.replace(/\n/g,'<br>')}</div>`:''}
-    <div style="margin-top:14px">${bullets}</div>
-    ${notes?`<div class="n-notes">${notes}</div>`:''}
-    <div class="n-footer">강남대성기숙 의대관</div>`;}
+  return `
+    ${d.title?`<div class="n-title" style="font-size:1.75em">${d.title}</div>`:''}
+    ${d.greeting?`<div class="n-greeting" style="margin-bottom:0.8em">${d.greeting.replace(/\n/g,'<br>')}</div>`:''}
+    <div class="n-bullets">${bullets}</div>
+    ${notes?`<div class="n-notes" style="margin-top:0.8em;padding-top:0.6em">${notes}</div>`:''}
+    <div class="n-footer" style="margin-top:0.8em;padding-top:0.6em;font-size:0.75em">강남대성기숙 의대관</div>`;}
 
-function pvFree(){const d=data;
-  return `${d.title?`<div class="n-title">${d.title}</div>`:''}
-    <div style="font-size:14px;line-height:1.9;white-space:pre-wrap">${d.body||''}</div>
-    <div class="n-footer">강남대성기숙 의대관</div>`;}
+function pvFree(){const d=data;return `
+  ${d.title?`<div class="n-title" style="font-size:1.75em">${d.title}</div>`:''}
+  <div style="line-height:1.9;white-space:pre-wrap;flex:1">${d.body||''}</div>
+  <div class="n-footer" style="margin-top:0.8em;padding-top:0.6em;font-size:0.75em">강남대성기숙 의대관</div>`;}
 
-// ══════════════════════════════════════════
-// 페이지 채우기 토글
-// ══════════════════════════════════════════
-document.getElementById('btnFill').addEventListener('click',()=>{
-  fillMode=!fillMode;
-  const paper=document.getElementById('paper');
-  document.getElementById('btnFill').classList.toggle('on',fillMode);
-  if(fillMode){
-    paper.classList.add('fill-on');
-    renderPreview();
-  } else {
-    paper.classList.remove('fill-on');
-    clearFill();
-    renderPreview();
-  }
-});
-
-// ══════════════════════════════════════════
-// TAB / ORIENTATION / FONT / RESET / PDF
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// TAB / ORIENTATION / RESET / PDF
+// ══════════════════════════════════════════════════════
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -533,23 +524,19 @@ function applyOrientation(){
   document.getElementById('btnPortrait').classList.toggle('active',orientation==='portrait');
   let s=document.getElementById('orientStyle');
   if(!s){s=document.createElement('style');s.id='orientStyle';document.head.appendChild(s);}
-  s.textContent=orientation==='landscape'?'@page{size:A4 landscape;margin:10mm 14mm}':'@page{size:A4 portrait;margin:10mm 14mm}';
-  if(fillMode)renderPreview();
+  s.textContent=orientation==='landscape'?'@page{size:A4 landscape;margin:8mm 12mm}':'@page{size:A4 portrait;margin:10mm 14mm}';
+  renderPreview();
 }
 document.getElementById('btnLandscape').addEventListener('click',()=>{orientation='landscape';applyOrientation();});
 document.getElementById('btnPortrait').addEventListener('click',()=>{orientation='portrait';applyOrientation();});
-applyOrientation();
-
-document.getElementById('fontSz').addEventListener('change',e=>{
-  document.getElementById('paper').style.fontSize=e.target.value+'px';
-  if(fillMode)applyFill();
-});
 document.getElementById('btnReset').addEventListener('click',()=>{if(confirm('초기화할까요?')){data=cloneDefault(tpl);renderEditor();renderPreview();}});
 document.getElementById('btnPDF').addEventListener('click',()=>window.print());
 
-// ══════════════════════════════════════════
+applyOrientation();
+
+// ══════════════════════════════════════════════════════
 // SAVED SIDEBAR
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 const TPL_LABEL={exam:'콘텐츠 시행 안내',absent:'휴강 안내',event:'행사/설명회',notice:'일반 공지',free:'자유 작성'};
 function toggleSidebar(forceOpen){
   const sb=document.getElementById('savedSidebar');
@@ -596,6 +583,7 @@ document.getElementById('btnSave').addEventListener('click',async()=>{
   catch(err){alert('저장 실패: '+err.message);}
 });
 
+// INIT
 data=cloneDefault(tpl);renderEditor();renderPreview();
 </script>
 </body>
