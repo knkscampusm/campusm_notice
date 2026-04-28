@@ -17,7 +17,6 @@
 html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--ink)}
 body{display:flex;flex-direction:column}
 
-/* ── Top bar ── */
 .topbar{
   height:56px;background:var(--white);border-bottom:1px solid var(--line);
   display:flex;align-items:center;justify-content:space-between;
@@ -28,10 +27,8 @@ body{display:flex;flex-direction:column}
 .topbar-logo span{color:var(--ink);font-weight:400;font-size:13px;margin-left:6px}
 .topbar-actions{display:flex;gap:8px}
 
-/* ── Workspace ── */
 .workspace{flex:1;display:flex;overflow:hidden}
 
-/* ── Left: Editor ── */
 .editor{
   width:400px;flex-shrink:0;background:var(--white);
   border-right:1px solid var(--line);
@@ -55,7 +52,6 @@ body{display:flex;flex-direction:column}
 .editor-body::-webkit-scrollbar{width:4px}
 .editor-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
 
-/* ── Right: Preview ── */
 .preview{
   flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);
 }
@@ -69,7 +65,6 @@ body{display:flex;flex-direction:column}
 .preview-scroll::-webkit-scrollbar{width:4px}
 .preview-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px}
 
-/* ── Form elements ── */
 .fg{margin-bottom:16px}
 .fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
 .inp{
@@ -90,7 +85,6 @@ body{display:flex;flex-direction:column}
   margin:22px 0 10px;padding-bottom:6px;border-bottom:1.5px solid var(--teal-bg);
 }
 
-/* Table editor */
 .tbl-wrap{border:1.5px solid var(--line);border-radius:8px;overflow:hidden;margin-top:6px}
 .tbl-row{display:flex;border-bottom:1px solid var(--line)}
 .tbl-row:last-child{border-bottom:none}
@@ -106,7 +100,6 @@ body{display:flex;flex-direction:column}
 .tbl-del button{background:none;border:none;color:var(--red);cursor:pointer;font-size:13px;opacity:.4;transition:opacity .2s}
 .tbl-del button:hover{opacity:1}
 
-/* Item rows */
 .item-rows{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .item-row{display:flex;gap:6px;align-items:flex-start}
 .item-row .lbl-inp{width:80px;flex-shrink:0}
@@ -121,7 +114,6 @@ body{display:flex;flex-direction:column}
 }
 .add-btn:hover{border-color:var(--teal);color:var(--teal)}
 
-/* ── Buttons ── */
 .btn{
   padding:8px 16px;border-radius:8px;font-family:var(--font);
   font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:none;
@@ -133,6 +125,17 @@ body{display:flex;flex-direction:column}
 .btn-ghost{background:none;border:none;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;padding:6px 10px;border-radius:6px}
 .btn-ghost:hover{background:var(--bg);color:var(--ink)}
 
+/* ── 자동 채우기 토글 버튼 ── */
+.fill-toggle{
+  display:flex;align-items:center;gap:6px;padding:4px 10px;
+  border:1.5px solid var(--line);border-radius:6px;
+  font-family:var(--font);font-size:11px;color:var(--muted);
+  background:none;cursor:pointer;transition:all .2s;
+}
+.fill-toggle.on{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700;}
+.fill-toggle:hover:not(.on){border-color:var(--ink2);color:var(--ink2)}
+.fill-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
 /* ── Notice paper ── */
 .paper{
   background:var(--white);width:100%;
@@ -140,13 +143,15 @@ body{display:flex;flex-direction:column}
   box-shadow:0 2px 24px rgba(0,0,0,0.07);
   font-family:var(--font);color:var(--ink);font-size:15px;
   transition:max-width .25s, min-height .25s;
+  position:relative;
 }
-/* 가로 (landscape) - 기본 */
 .paper.landscape{max-width:960px;min-height:560px;}
-/* 세로 (portrait) */
 .paper.portrait{max-width:680px;min-height:860px;}
 
-/* orientation toggle buttons */
+/* 자동채우기 ON일 때 paper가 정확한 페이지 높이를 가짐 */
+.paper.fill-mode.landscape{height:560px;min-height:unset;}
+.paper.fill-mode.portrait{height:860px;min-height:unset;}
+
 .orient-btn{
   background:none;border:1.5px solid var(--line);border-radius:6px;
   padding:4px 10px;font-family:var(--font);font-size:11px;color:var(--muted);
@@ -154,6 +159,7 @@ body{display:flex;flex-direction:column}
 }
 .orient-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);font-weight:700;}
 .orient-btn:hover:not(.active){border-color:var(--ink2);color:var(--ink2)}
+
 .n-title{font-size:28px;font-weight:900;text-align:center;letter-spacing:-.3px;margin-bottom:24px;line-height:1.35}
 .n-table{width:100%;table-layout:fixed;border-collapse:collapse;margin-bottom:14px;font-size:14px}
 .n-table th{background:var(--teal);color:#fff;padding:10px 12px;text-align:center;font-weight:700;font-size:13px;word-break:keep-all}
@@ -180,7 +186,12 @@ body{display:flex;flex-direction:column}
 .n-big-bullet::before{content:'▶';color:var(--teal);font-weight:700;flex-shrink:0}
 .n-footer{margin-top:32px;border-top:1px solid var(--line);padding-top:10px;text-align:right;font-size:11px;font-weight:700;color:var(--teal-d)}
 
-/* ── Modal ── */
+/* fill-mode일 때 footer는 항상 하단 고정 */
+.paper.fill-mode .n-footer{
+  position:absolute;bottom:52px;right:56px;left:56px;
+  margin-top:0;
+}
+
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:999}
 .overlay.on{display:flex}
 .modal{background:var(--white);border-radius:16px;width:480px;max-width:90vw;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.18)}
@@ -188,11 +199,7 @@ body{display:flex;flex-direction:column}
 .modal-hd h3{font-size:15px;font-weight:700}
 .modal-x{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted)}
 .modal-bd{padding:18px 22px;overflow-y:auto}
-.saved-item{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;margin-bottom:7px;cursor:pointer;transition:all .2s}
-.saved-item:hover{border-color:var(--teal);background:var(--teal-bg)}
-.saved-name{font-size:13px;font-weight:600}
-.saved-meta{font-size:11px;color:var(--muted);margin-top:1px}
-/* ── Saved sidebar ── */
+
 .saved-sidebar{
   width:0;flex-shrink:0;background:var(--white);border-left:0px solid var(--line);
   display:flex;flex-direction:column;overflow:hidden;
@@ -226,7 +233,8 @@ body{display:flex;flex-direction:column}
   .topbar,.editor,.preview-bar,.saved-sidebar{display:none!important}
   body,.workspace,.preview{display:block;overflow:visible;background:white}
   .preview-scroll{padding:0;overflow:visible;display:block}
-  .paper{box-shadow:none;max-width:100%!important;padding:12mm 16mm;border-radius:0;min-height:unset!important}
+  .paper{box-shadow:none;max-width:100%!important;padding:12mm 16mm;border-radius:0;min-height:unset!important;height:auto!important;position:static!important}
+  .paper.fill-mode .n-footer{position:static!important;margin-top:auto!important}
   .n-table th{background:#3DBDB5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important}
   .n-label{color:#3DBDB5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .n-footer{color:#2a9e96!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -235,7 +243,6 @@ body{display:flex;flex-direction:column}
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="topbar-logo">의대관 <span>공지문 작성기</span></div>
   <div class="topbar-actions">
@@ -245,10 +252,7 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-<!-- WORKSPACE -->
 <div class="workspace">
-
-  <!-- EDITOR -->
   <div class="editor">
     <div class="editor-tabs">
       <button class="tab-btn active" data-tpl="exam">콘텐츠 시행</button>
@@ -260,7 +264,6 @@ body{display:flex;flex-direction:column}
     <div class="editor-body" id="editorBody"></div>
   </div>
 
-  <!-- PREVIEW -->
   <div class="preview">
     <div class="preview-bar">
       <span class="preview-bar-label">미리보기</span>
@@ -274,6 +277,12 @@ body{display:flex;flex-direction:column}
           <option value="15" selected>중</option>
           <option value="17">대</option>
         </select>
+        <div style="width:1px;height:16px;background:var(--line);margin:0 2px"></div>
+        <!-- 자동 채우기 토글 -->
+        <button class="fill-toggle" id="btnFill">
+          <span class="fill-dot"></span>
+          페이지 채우기
+        </button>
         <button class="btn-ghost" id="btnReset">초기화</button>
       </div>
     </div>
@@ -282,7 +291,6 @@ body{display:flex;flex-direction:column}
     </div>
   </div>
 
-  <!-- SAVED SIDEBAR -->
   <div class="saved-sidebar" id="savedSidebar">
     <div class="saved-sidebar-hd">
       <span>저장 목록</span>
@@ -294,7 +302,6 @@ body{display:flex;flex-direction:column}
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy }
@@ -311,9 +318,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ── State ──────────────────────────────────────────────────────────
 let tpl = 'exam';
 let data = {};
+let fillMode = false;
 
 const DEFAULTS = {
   exam: {
@@ -495,7 +502,6 @@ function tableEditor(headers, rows) {
   `;
 }
 
-// ── Editor events ──────────────────────────────────────────────────
 function bindEditor() {
   const el = document.getElementById('editorBody');
   el.addEventListener('input', e => {
@@ -536,7 +542,113 @@ function renderPreview() {
   document.getElementById('paper').innerHTML = {
     exam: pvExam, absent: pvAbsent, event: pvEvent, notice: pvNotice, free: pvFree
   }[tpl]();
+
+  // fill mode라면 렌더 후 자동 채우기 적용
+  if (fillMode) {
+    requestAnimationFrame(() => applyFill());
+  }
 }
+
+// ── 자동 채우기 핵심 로직 ──────────────────────────────────────────
+function applyFill() {
+  const paper = document.getElementById('paper');
+  if (!fillMode) {
+    // fill mode 해제: 인라인 스타일 제거
+    paper.querySelectorAll('.n-table td, .n-table th').forEach(el => {
+      el.style.paddingTop = '';
+      el.style.paddingBottom = '';
+      el.style.fontSize = '';
+    });
+    paper.querySelectorAll('.n-item,.n-bullet,.n-big-bullet,.n-note,.n-caution,.n-greeting,.n-sec').forEach(el => {
+      el.style.marginBottom = '';
+      el.style.lineHeight = '';
+    });
+    paper.querySelectorAll('.n-body,.n-notes,.n-cautions,.n-sec-title').forEach(el => {
+      el.style.marginTop = '';
+      el.style.paddingTop = '';
+      el.style.paddingBottom = '';
+    });
+    paper.querySelectorAll('.n-title').forEach(el => {
+      el.style.marginBottom = '';
+      el.style.fontSize = '';
+    });
+    return;
+  }
+
+  const paperH = paper.clientHeight;
+  const contentH = paper.scrollHeight;
+  const footer = paper.querySelector('.n-footer');
+  const footerH = footer ? footer.offsetHeight + 32 : 50; // footer 포함 여유
+
+  const available = paperH - footerH;
+  const used = contentH - paperH; // 음수면 남는 공간, 양수면 넘침
+
+  // 남는 공간 계산 (음수 = 공간 남음)
+  const spare = available - (contentH - (footer ? footer.offsetHeight + 32 + 10 : 50));
+
+  if (spare <= 10) return; // 이미 꽉 차있으면 패스
+
+  // 표 행들을 찾아서 padding 증가
+  const tableRows = paper.querySelectorAll('.n-table tbody tr');
+  const contentBlocks = paper.querySelectorAll('.n-item,.n-big-bullet,.n-bullet,.n-greeting,.n-sec,.n-caution');
+
+  // 배분할 요소 총 개수
+  const totalElements = tableRows.length + contentBlocks.length;
+  if (totalElements === 0) return;
+
+  // 요소당 추가 padding
+  const addPerElement = Math.min(spare / totalElements, 40); // 요소당 최대 40px
+
+  tableRows.forEach(row => {
+    const tds = row.querySelectorAll('td');
+    const currentPadV = 9; // 기본값
+    const newPad = currentPadV + addPerElement / 2;
+    tds.forEach(td => {
+      td.style.paddingTop = newPad + 'px';
+      td.style.paddingBottom = newPad + 'px';
+    });
+  });
+
+  contentBlocks.forEach(block => {
+    const currentMb = parseFloat(block.style.marginBottom) || 0;
+    block.style.marginBottom = (currentMb + addPerElement / 2) + 'px';
+    block.style.lineHeight = '2.1';
+  });
+
+  // 그래도 남는 공간이 크면 제목 margin도 늘리기
+  const paper2 = document.getElementById('paper');
+  const spare2 = paper2.clientHeight - paper2.scrollHeight;
+  if (spare2 > 20) {
+    const title = paper2.querySelector('.n-title');
+    if (title) {
+      const cur = parseFloat(title.style.marginBottom) || 24;
+      title.style.marginBottom = Math.min(cur + spare2 * 0.4, 80) + 'px';
+    }
+    const cautions = paper2.querySelector('.n-cautions');
+    if (cautions) {
+      const cur = parseFloat(cautions.style.paddingTop) || 10;
+      cautions.style.paddingTop = (cur + spare2 * 0.1) + 'px';
+      cautions.style.paddingBottom = (cur + spare2 * 0.1) + 'px';
+    }
+  }
+}
+
+// ── 페이지 채우기 토글 ─────────────────────────────────────────────
+document.getElementById('btnFill').addEventListener('click', () => {
+  fillMode = !fillMode;
+  const btn = document.getElementById('btnFill');
+  const paper = document.getElementById('paper');
+  btn.classList.toggle('on', fillMode);
+
+  if (fillMode) {
+    paper.classList.add('fill-mode');
+    renderPreview();
+  } else {
+    paper.classList.remove('fill-mode');
+    applyFill(); // 스타일 제거
+    renderPreview();
+  }
+});
 
 function pvExam() {
   const d = data;
@@ -619,7 +731,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ── Orientation ────────────────────────────────────────────────────
-let orientation = 'landscape'; // default
+let orientation = 'landscape';
 
 function applyOrientation() {
   const paper = document.getElementById('paper');
@@ -628,12 +740,13 @@ function applyOrientation() {
   document.getElementById('btnLandscape').classList.toggle('active', orientation === 'landscape');
   document.getElementById('btnPortrait').classList.toggle('active', orientation === 'portrait');
 
-  // @page size for print
   let styleTag = document.getElementById('orientStyle');
   if (!styleTag) { styleTag = document.createElement('style'); styleTag.id = 'orientStyle'; document.head.appendChild(styleTag); }
   styleTag.textContent = orientation === 'landscape'
     ? '@page { size: A4 landscape; margin: 10mm 14mm; }'
     : '@page { size: A4 portrait; margin: 10mm 14mm; }';
+
+  if (fillMode) requestAnimationFrame(() => applyFill());
 }
 
 document.getElementById('btnLandscape').addEventListener('click', () => { orientation = 'landscape'; applyOrientation(); });
@@ -642,6 +755,7 @@ document.getElementById('btnPortrait').addEventListener('click', () => { orienta
 applyOrientation();
 document.getElementById('fontSz').addEventListener('change', e => {
   document.getElementById('paper').style.fontSize = e.target.value + 'px';
+  if (fillMode) requestAnimationFrame(() => applyFill());
 });
 
 // ── Reset ──────────────────────────────────────────────────────────
@@ -697,18 +811,15 @@ async function loadSavedList() {
         </div>
         <div class="ss-meta">${TPL_LABEL[item.tpl]||item.tpl} · ${date}</div>
       `;
-      // 불러오기
       el.addEventListener('click', e => {
         if (e.target.classList.contains('ss-del')) return;
         tpl = item.tpl;
         data = JSON.parse(item.data);
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tpl === tpl));
         renderEditor(); renderPreview();
-        // 활성 표시
         document.querySelectorAll('.ss-item').forEach(i => i.classList.remove('active-item'));
         el.classList.add('active-item');
       });
-      // 삭제
       el.querySelector('.ss-del').addEventListener('click', async e => {
         e.stopPropagation();
         if (!confirm('삭제할까요?')) return;
@@ -725,19 +836,16 @@ async function loadSavedList() {
   }
 }
 
-// ── Save ───────────────────────────────────────────────────────────
 document.getElementById('btnSave').addEventListener('click', async () => {
   const label = TPL_LABEL[tpl];
   const now = new Date();
   const name = `${label} ${now.toLocaleDateString('ko-KR', {month:'numeric',day:'numeric'})} ${now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`;
   try {
     await addDoc(collection(db,'notices'), { name, tpl, data: JSON.stringify(data), createdAt: serverTimestamp() });
-    // 사이드바 열고 목록 갱신
     toggleSidebar(true);
   } catch(err) { alert('저장 실패: ' + err.message); }
 });
 
-// ── Modal close (legacy cleanup) ───────────────────────────────────
 document.querySelectorAll('[data-close]').forEach(btn => {
   btn.addEventListener('click', () => document.getElementById(btn.dataset.close)?.classList.remove('on'));
 });
@@ -745,7 +853,6 @@ document.querySelectorAll('.overlay').forEach(ov => {
   ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('on'); });
 });
 
-// ── Init ───────────────────────────────────────────────────────────
 data = cloneDefault(tpl);
 renderEditor();
 renderPreview();
